@@ -1,0 +1,25 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><title>Mijn Pokémon Collectie</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{position:sticky;top:0;z-index:10;background:#111827;color:#fff;padding:14px}h1{font-size:20px;margin:0 0 10px}.tools,.tabs{display:flex;gap:8px}.tabs{overflow:auto;padding-top:10px}.tab{white-space:nowrap;border:0;border-radius:99px;padding:9px 12px;background:#374151;color:#fff;font-weight:700}.tab.on{background:#facc15;color:#111827}input,select{border:0;border-radius:10px;padding:10px;font-size:16px}input{min-width:0;flex:1}main{padding:14px;max-width:1100px;margin:auto}.sum{font-weight:800;margin-bottom:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{position:relative;background:#fff;border:3px solid transparent;border-radius:14px;padding:7px;box-shadow:0 2px 8px #0001}.card.y{border-color:#22c55e;background:#f0fdf4}.pic{width:100%;aspect-ratio:2.5/3.5;object-fit:contain;background:#e5e7eb;border-radius:9px}.n{font-weight:800;margin:6px 2px}.b{position:absolute;right:6px;top:6px;background:#111827;color:#fff;border-radius:99px;padding:5px 7px;font-size:10px;font-weight:900}.y .b{background:#16a34a}@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}@media(min-width:950px){.grid{grid-template-columns:repeat(6,1fr)}}</style></head><body><header><h1>⚡ Mijn Pokémon Collectie</h1><div class="tools"><input id="q" placeholder="Zoek nummer…"><select id="f"><option value="all">Alles</option><option value="yes">In bezit</option><option value="no">Ontbreekt</option></select></div><div class="tabs" id="tabs"></div></header><main><div class="sum" id="sum"></div><div class="grid" id="grid"></div></main><script>
+const S=[
+["Perfect Order","me3",124,[1,2,3,5,6,8,9,10,11,13,14,15,17,18,19,20,22,23,26,27,28,29,32,33,34,35,36,37,41,42,43,45,46,48,49,52,54,56,57,58,59,61,63,64,65,66,67,68,70,72,73,75,76,77,78,79,81,82,84,86,87,90,95]],
+["Phantasmal Flames","me2",130,[1,2,5,7,8,10,12,16,21,23,30,31,32,33,34,35,39,43,44,48,49,52,53,55,57,60,61,62,64,65,66,72,76,79,81,83,86,87,88,89,90,129]],
+["Pitch Black","me5",120,[3,4,5,6,10,14,17,19,20,21,22,24,30,36,41,42,43,44,48,49,50,51,58,64,66,68,69,70,71,77,78,80,81,83]],
+["Stellar Crown","sv7",175,[13,18,21,23,24,25,28,29,39,45,47,49,50,66,79,81,86,98,101,106,120,124,125,127,130,133,135,136,162]],
+["Chaos Rising","me4",122,[2,6,9,10,11,13,17,21,24,34,37,43,47,53,59,61,66,70,71,74,81,85,86,96,113]],
+["Mega Evolution","me1",188,[4,6,8,9,10,15,20,23,26,27,28,34,37,47,67,68,69,75,90,97,99,101,126]],
+["Journey Together","sv9",190,[4,6,26,35,39,44,46,47,52,55,56,73,78,102,109,125,127,137,153,156]],
+["Scarlet & Violet","sv1",258,[2,79,84,117,149,151,153,160,186,196]],
+["Sword & Shield","swsh1",216,[130,131,163,164,165,177]],
+["Fusion Strike","swsh8",284,[186,226,228,240]],
+["Vivid Voltage","swsh4",203,[112,121]],
+["Rebel Clash","swsh2",209,[127,167]],
+["Chilling Reign","swsh6",233,[114]],
+["Battle Styles","swsh5",183,[125]],
+["Shining Fates","swsh45",72,[59]],
+["Temporal Forces","sv5",218,[51]],
+["Promo","mep",0,[43,44,45,55,56,57,68,71]],
+["Mega Evolution Energy","me1",0,[1,2,3,4,5,6,7,8]],
+["Scarlet & Violet Energy","sve",0,[5,9,12,14,16]]
+];
+let cur=0,store=JSON.parse(localStorage.getItem("poke-all-v1")||"{}");function key(s,n){return s[0]+"#"+n}function has(s,n){let k=key(s,n);return k in store?store[k]:s[3].includes(n)}function nums(s){return s[2]?[...Array(s[2])].map((_,i)=>i+1):s[3]}function img(s,n){return "https://images.scrydex.com/pokemon/"+s[1]+"-"+n+"/medium"}function tabs(){let e=document.getElementById("tabs");e.innerHTML="";S.forEach((s,i)=>{let b=document.createElement("button");b.className="tab"+(i===cur?" on":"");b.textContent=s[0];b.onclick=()=>{cur=i;tabs();render()};e.appendChild(b)})}function render(){let s=S[cur],a=nums(s),q=document.getElementById("q").value.trim(),f=document.getElementById("f").value,own=a.filter(n=>has(s,n)).length;document.getElementById("sum").textContent=s[0]+" · "+own+" / "+a.length+" in bezit";a=a.filter(n=>(!q||String(n).includes(q))&&(f==="all"||(f==="yes"&&has(s,n))||(f==="no"&&!has(s,n))));let g=document.getElementById("grid");g.innerHTML="";a.forEach(n=>{let y=has(s,n),e=document.createElement("article");e.className="card"+(y?" y":"");e.innerHTML='<span class="b">'+(y?"✓ HEB IK":"+ TOEVOEGEN")+'</span><img class="pic" loading="lazy" src="'+img(s,n)+'" alt="'+s[0]+' #'+n+'" onerror="this.style.opacity=.15"><div class="n">#'+String(n).padStart(3,"0")+"</div>";e.onclick=()=>{store[key(s,n)]=!has(s,n);localStorage.setItem("poke-all-v1",JSON.stringify(store));render()};g.appendChild(e)})}document.getElementById("q").oninput=render;document.getElementById("f").onchange=render;tabs();render();
+</script></body></html>
