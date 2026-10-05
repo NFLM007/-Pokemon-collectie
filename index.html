@@ -16,10 +16,11 @@ const S=[
 ["Chilling Reign","swsh6",233,[114]],
 ["Battle Styles","swsh5",183,[125]],
 ["Shining Fates","swsh45",72,[59]],
+["Shining Fates · Shiny Vault","swsh45sv",122,[]],
 ["Temporal Forces","sv5",218,[51]],
-["Promo","mep",0,[43,44,45,55,56,57,68,71]],
-["Mega Evolution Energy","me1",0,[1,2,3,4,5,6,7,8]],
-["Scarlet & Violet Energy","sve",0,[5,9,12,14,16]]
-];
+["Promo · MEP Black Star","mep",94,[43,44,45,55,56,57,68,71]],
+["Mega Evolution Energy","mee",8,[1,2,3,4,5,6,7,8]],
+["Scarlet & Violet Energy","sve",16,[5,9,12,14,16]]
+]
 let cur=0,store=JSON.parse(localStorage.getItem("poke-all-v1")||"{}");function key(s,n){return s[0]+"#"+n}function has(s,n){let k=key(s,n);return k in store?store[k]:s[3].includes(n)}function nums(s){return s[2]?[...Array(s[2])].map((_,i)=>i+1):s[3]}function img(s,n){return "https://images.scrydex.com/pokemon/"+s[1]+"-"+n+"/medium"}function tabs(){let e=document.getElementById("tabs");e.innerHTML="";S.forEach((s,i)=>{let b=document.createElement("button");b.className="tab"+(i===cur?" on":"");b.textContent=s[0];b.onclick=()=>{cur=i;tabs();render()};e.appendChild(b)})}function render(){let s=S[cur],a=nums(s),q=document.getElementById("q").value.trim(),f=document.getElementById("f").value,own=a.filter(n=>has(s,n)).length;document.getElementById("sum").textContent=s[0]+" · "+own+" / "+a.length+" in bezit";a=a.filter(n=>(!q||String(n).includes(q))&&(f==="all"||(f==="yes"&&has(s,n))||(f==="no"&&!has(s,n))));let g=document.getElementById("grid");g.innerHTML="";a.forEach(n=>{let y=has(s,n),e=document.createElement("article");e.className="card"+(y?" y":"");e.innerHTML='<span class="b">'+(y?"✓ HEB IK":"+ TOEVOEGEN")+'</span><img class="pic" loading="lazy" src="'+img(s,n)+'" alt="'+s[0]+' #'+n+'" onerror="this.style.opacity=.15"><div class="n">#'+String(n).padStart(3,"0")+"</div>";e.onclick=()=>{store[key(s,n)]=!has(s,n);localStorage.setItem("poke-all-v1",JSON.stringify(store));render()};g.appendChild(e)})}document.getElementById("q").oninput=render;document.getElementById("f").onchange=render;tabs();render();
 </script></body></html>
